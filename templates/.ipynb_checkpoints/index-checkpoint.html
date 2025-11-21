@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>توقع مبيعات Rossmann</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .container { max_width: 800px; margin-top: 50px; background: white; padding: 30px; border-radius: 10px; shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { color: #0d6efd; margin-bottom: 30px; text-align: center; }
+        .section-title { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+<div class="container shadow">
+    <h2>📈 نظام توقع المبيعات</h2>
+
+    <h4 class="section-title">1. توقع لمتجر واحد</h4>
+    <form action="/predict" method="post" class="row g-3">
+        
+        <div class="col-md-6">
+            <label class="form-label">التاريخ</label>
+            <input type="date" class="form-control" name="Date" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">يوم الأسبوع (1=الاثنين, 7=الأحد)</label>
+            <input type="number" class="form-control" name="DayOfWeek" min="1" max="7" required>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">نوع المتجر (StoreType)</label>
+            <select name="StoreType" class="form-select">
+                <option value="a">a</option>
+                <option value="b">b</option>
+                <option value="c">c</option>
+                <option value="d">d</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">التشكيلة (Assortment)</label>
+            <select name="Assortment" class="form-select">
+                <option value="a">a</option>
+                <option value="b">b</option>
+                <option value="c">c</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">إجازة رسمية (StateHoliday)</label>
+            <select name="StateHoliday" class="form-select">
+                <option value="0">لا يوجد</option>
+                <option value="a">إجازة عامة</option>
+                <option value="b">عيد الفصح</option>
+                <option value="c">عيد الميلاد</option>
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">يوجد عرض ترويجي (Promo)؟</label>
+            <select name="Promo" class="form-select">
+                <option value="1">نعم</option>
+                <option value="0">لا</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">إجازة مدارس (SchoolHoliday)؟</label>
+            <select name="SchoolHoliday" class="form-select">
+                <option value="0">لا</option>
+                <option value="1">نعم</option>
+            </select>
+        </div>
+
+        <div class="col-md-12">
+            <label class="form-label">مسافة المنافس (CompetitionDistance)</label>
+            <input type="number" class="form-control" name="CompetitionDistance" value="500">
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Promo2 (مستمر)؟</label>
+            <select name="Promo2" class="form-select">
+                <option value="0">لا</option>
+                <option value="1">نعم</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">سنة بدء المنافسة</label>
+            <input type="number" class="form-control" name="CompetitionOpenSinceYear" value="2010">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">سنة بدء Promo2</label>
+            <input type="number" class="form-control" name="Promo2SinceYear" value="0">
+        </div>
+
+        <div class="col-12 text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg px-5">توقع المبيعات</button>
+        </div>
+    </form>
+
+    {% if prediction_text %}
+    <div class="alert alert-success mt-4 text-center">
+        <h3>{{ prediction_text }}</h3>
+    </div>
+    {% endif %}
+
+    <h4 class="section-title mt-5">2. توقع لملف بيانات كامل (CSV)</h4>
+    <form action="/upload" method="post" enctype="multipart/form-data" class="row g-3 align-items-center">
+        <div class="col-auto">
+            <input type="file" name="file" class="form-control" accept=".csv" required>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-success">رفع وتوقع</button>
+        </div>
+        <div class="form-text">يجب أن يحتوي الملف على نفس أعمدة ملف التدريب.</div>
+    </form>
+
+</div>
+
+</body>
+</html>

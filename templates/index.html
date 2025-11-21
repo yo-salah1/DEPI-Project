@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rossmann Sales Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .container { max-width: 800px; margin-top: 50px; background: white; padding: 30px; border-radius: 10px; shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { color: #0d6efd; margin-bottom: 30px; text-align: center; }
+        .section-title { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+<div class="container shadow">
+    <h2>📈 Sales Prediction System</h2>
+
+    <h4 class="section-title">1. Single Store Prediction</h4>
+    <form action="/predict" method="post" class="row g-3">
+        
+        <div class="col-md-6">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-control" name="Date" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Day of Week (1=Mon, 7=Sun)</label>
+            <input type="number" class="form-control" name="DayOfWeek" min="1" max="7" required>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Store Type</label>
+            <select name="StoreType" class="form-select">
+                <option value="a">a</option>
+                <option value="b">b</option>
+                <option value="c">c</option>
+                <option value="d">d</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Assortment</label>
+            <select name="Assortment" class="form-select">
+                <option value="a">a</option>
+                <option value="b">b</option>
+                <option value="c">c</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">State Holiday</label>
+            <select name="StateHoliday" class="form-select">
+                <option value="0">None</option>
+                <option value="a">Public Holiday</option>
+                <option value="b">Easter</option>
+                <option value="c">Christmas</option>
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Promo Active?</label>
+            <select name="Promo" class="form-select">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">School Holiday?</label>
+            <select name="SchoolHoliday" class="form-select">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </div>
+
+        <div class="col-md-12">
+            <label class="form-label">Competition Distance</label>
+            <input type="number" class="form-control" name="CompetitionDistance" value="500">
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Promo2 Active?</label>
+            <select name="Promo2" class="form-select">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Competition Start Year</label>
+            <input type="number" class="form-control" name="CompetitionOpenSinceYear" value="2010">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Promo2 Start Year</label>
+            <input type="number" class="form-control" name="Promo2SinceYear" value="0">
+        </div>
+
+        <div class="col-12 text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg px-5">Predict Sales</button>
+        </div>
+    </form>
+
+    {% if prediction_text %}
+    <div class="alert alert-success mt-4 text-center">
+        <h3>{{ prediction_text }}</h3>
+    </div>
+    {% endif %}
+
+    <h4 class="section-title mt-5">2. Batch CSV Prediction</h4>
+    <form action="/upload" method="post" enctype="multipart/form-data" class="row g-3 align-items-center">
+        <div class="col-auto">
+            <input type="file" name="file" class="form-control" accept=".csv" required>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-success">Upload & Predict</button>
+        </div>
+        <div class="form-text">The file should contain the same columns as the training data.</div>
+    </form>
+
+</div>
+
+</body>
+</html>
